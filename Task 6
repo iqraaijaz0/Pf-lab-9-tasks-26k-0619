@@ -1,0 +1,58 @@
+#include <stdio.h>
+void printValue(void *ptr, char type) {
+    if (type == 'i') {
+        printf("%d\n", *(int *)ptr);
+    }
+    if (type == 'f') {
+        printf("%.2f\n", *(float *)ptr);
+    }
+    if (type == 'c') {
+        printf("%c\n", *(char *)ptr);
+    }
+}
+int add(int a, int b) {
+    return a + b;
+}
+int sub(int a, int b) {
+    return a - b;
+}
+int mul(int a, int b) {
+    return a * b;
+}
+int divide(int a, int b) {
+    if (b == 0) {
+        return 0;
+    }
+    return a / b;
+}
+int applyOp(int a, int b, int (*op)(int, int)) {
+    return op(a, b);
+}
+int main() {
+    int (*ops[4])(int, int) = {add, sub, mul, divide};
+    int a, b, choice, result;
+    int num = 45;
+    float dec = 12.34;
+    char ch = 'A';
+    printf("Int: ");
+    printValue(&num, 'i');
+    printf("Float: ");
+    printValue(&dec, 'f');
+    printf("Char: ");
+    printValue(&ch, 'c');
+    printf("Enter two numbers: ");
+    scanf("%d %d", &a, &b);
+    printf("1 Add, 2 Sub, 3 Mul, 4 Div: ");
+    scanf("%d", &choice);
+    if (choice < 1 || choice > 4) {
+        printf("Invalid choice\n");
+        return 0;
+    }
+    if (choice == 4 && b == 0) {
+        printf("Error: Division by zero not allowed\n");
+        return 0;
+    }
+    result = applyOp(a, b, ops[choice - 1]);
+    printf("Result: %d\n", result);
+    return 0;
+}
