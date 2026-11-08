@@ -1,0 +1,60 @@
+#include <stdio.h>
+int main() {
+    int readings[7];
+    int *p = readings;
+    int *linked = 0;
+    int *end = readings + 7;
+    int total = 0;
+    int highest = 0;
+    int highDay = 1;
+    int threshold, choice, i;
+    int diff;
+    for (i = 0; i < 7; i++) {
+        printf("Enter day %d units: ", i + 1);
+        scanf("%d", p + i);
+    }
+    printf("\nDay\tUnits\tAddress\n");
+    for (i = 0; i < 7; i++) {
+        printf("%d\t%d\t%p\n", i + 1, *(p + i), (void *)(p + i));
+    }
+    diff = (char *)(p + 1) - (char *)p;
+    printf("Distance between consecutive addresses: %d bytes\n", diff);
+    printf("Reason: int takes %d bytes in memory\n", diff);
+    for (i = 0; i < 7; i++) {
+        total = total + *(p + i);
+        if (*(p + i) > highest) {
+            highest = *(p + i);
+            highDay = i + 1;
+        }
+    }
+    printf("Weekly Total: %d\n", total);
+    printf("Highest: %d on Day %d\n", highest, highDay);
+    printf("Enter peak threshold: ");
+    scanf("%d", &threshold);
+    for (i = 0; i < 7; i++) {
+        if (*(p + i) > threshold) {
+            *(p + i) = *(p + i) * 2;
+        }
+    }
+    printf("\nAfter peak adjustment:\n");
+    for (i = 0; i < 7; i++) {
+        printf("Day %d: %d\n", i + 1, *(p + i));
+    }
+    if (linked == 0) {
+        printf("Linked meter: Not assigned (NULL)\n");
+    } else {
+        printf("Linked meter value: %d\n", *linked);
+    }
+    printf("Assign linked meter? 1 for Yes, 0 for No: ");
+    scanf("%d", &choice);
+    if (choice == 1) {
+        linked = p + 2;
+    }
+    if (linked == 0) {
+        printf("Linked meter: Still NULL, safe\n");
+    } else {
+        printf("Linked meter reading: %d\n", *linked);
+    }
+    printf("End pointer address: %p\n", (void *)end);
+    return 0;
+}
