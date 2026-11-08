@@ -1,0 +1,94 @@
+#include <stdio.h>
+int calcTotal(int *marks, int n) {
+    int s = 0;
+    int i;
+    for (i = 0; i < n; i++) {
+        s = s + *(marks + i);
+    }
+    return s;
+}
+int findHighest(int *marks, int n) {
+    int h = *marks;
+    int i;
+    for (i = 1; i < n; i++) {
+        if (*(marks + i) > h) {
+            h = *(marks + i);
+        }
+    }
+    return h;
+}
+int findLowest(int *marks, int n) {
+    int l = *marks;
+    int i;
+    for (i = 1; i < n; i++) {
+        if (*(marks + i) < l) {
+            l = *(marks + i);
+        }
+    }
+    return l;
+}
+int countPass(int *marks, int n, int passMarks) {
+    int c = 0;
+    int i;
+    for (i = 0; i < n; i++) {
+        if (*(marks + i) >= passMarks) {
+            c++;
+        }
+    }
+    return c;
+}
+int countTop(int *marks, int n, int top) {
+    int c = 0;
+    int i;
+    for (i = 0; i < n; i++) {
+        if (*(marks + i) == top) {
+            c++;
+        }
+    }
+    return c;
+}
+void applyBonus(int *marks, int n, int bonus) {
+    int i;
+    for (i = 0; i < n; i++) {
+        *(marks + i) = *(marks + i) + bonus;
+        if (*(marks + i) > 100) {
+            *(marks + i) = 100;
+        }
+    }
+}
+void showReport(int *marks, int n, int passMarks) {
+    int total = calcTotal(marks, n);
+    int high = findHighest(marks, n);
+    int low = findLowest(marks, n);
+    int pass = countPass(marks, n, passMarks);
+    int topCount = countTop(marks, n, high);
+    float avg = (float)total / n;
+    printf("Total: %d\n", total);
+    printf("Average: %.2f\n", avg);
+    printf("Highest: %d\n", high);
+    printf("Lowest: %d\n", low);
+    printf("Pass Count: %d\n", pass);
+    printf("Top Scorer Count: %d\n", topCount);
+}
+int main() {
+    int marks[10];
+    int passMarks, bonus, i;
+    for (i = 0; i < 10; i++) {
+        printf("Enter marks of student %d (0-100): ", i + 1);
+        scanf("%d", &marks[i]);
+        while (marks[i] < 0 || marks[i] > 100) {
+            printf("Invalid! Enter again (0-100): ");
+            scanf("%d", &marks[i]);
+        }
+    }
+    printf("Enter pass threshold: ");
+    scanf("%d", &passMarks);
+    printf("\n---- BEFORE BONUS ----\n");
+    showReport(marks, 10, passMarks);
+    printf("Enter bonus: ");
+    scanf("%d", &bonus);
+    applyBonus(marks, 10, bonus);
+    printf("\n---- AFTER BONUS ----\n");
+    showReport(marks, 10, passMarks);
+    return 0;
+}
