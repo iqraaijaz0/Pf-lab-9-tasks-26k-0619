@@ -1,0 +1,48 @@
+#include <stdio.h>
+void repair(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+    printf("Inside repair: a addr %p value %d, b addr %p value %d\n", (void *)a, *a, (void *)b, *b);
+}
+void failedAttempt(int a, int b) {
+    int temp = a;
+    a = b;
+    b = temp;
+    printf("Inside failed: a addr %p value %d, b addr %p value %d\n", (void *)&a, a, (void *)&b, b);
+}
+void stats(int *arr, int n, int *total, int *high, int *low) {
+    int i;
+    *total = 0;
+    *high = *arr;
+    *low = *arr;
+    for (i = 0; i < n; i++) {
+        *total = *total + *(arr + i);
+        if (*(arr + i) > *high) {
+            *high = *(arr + i);
+        }
+        if (*(arr + i) < *low) {
+            *low = *(arr + i);
+        }
+    }
+    printf("Inside stats: arr addr %p, total addr %p, high addr %p, low addr %p\n", (void *)arr, (void *)total, (void *)high, (void *)low);
+}
+int main() {
+    int wardA = 30;
+    int wardB = 20;
+    int x = 5;
+    int y = 9;
+    int week[7] = {12, 18, 15, 20, 11, 19, 14};
+    int total, high, low;
+    printf("Before repair: A = %d (addr %p), B = %d (addr %p)\n", wardA, (void *)&wardA, wardB, (void *)&wardB);
+    repair(&wardA, &wardB);
+    printf("After repair: A = %d, B = %d\n", wardA, wardB);
+    printf("\nFailed attempt:\n");
+    printf("Before failed: x = %d (addr %p), y = %d (addr %p)\n", x, (void *)&x, y, (void *)&y);
+    failedAttempt(x, y);
+    printf("After failed: x = %d, y = %d (No change)\n", x, y);
+    stats(week, 7, &total, &high, &low);
+    printf("Week Total: %d, Highest: %d, Lowest: %d\n", total, high, low);
+    printf("In main: total addr %p, high addr %p, low addr %p\n", (void *)&total, (void *)&high, (void *)&low);
+    return 0;
+}
